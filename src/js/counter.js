@@ -96,7 +96,7 @@ const usaChange = countMoney(usaCoins);
         //Canada
 const canadaCoins = [
   [2, 'toonie'],
-  [1, 'loonie']
+  [1, 'loonie'],
   [.25,'quarter'],
   [.1,'dime'],
   [.05,'nickel'],
