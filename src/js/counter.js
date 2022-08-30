@@ -21,11 +21,11 @@ coinCounter(0);
 
 //--------------------------------------------------------------------
 
-function coin(value) {
+function coined(value) {
   return function(money){
     return Math.floor(money / value); //floor will round 19.96 down to 19	
   }
-}
+} //return coinCounter(amount % ${value})
 
 function toSentence(quarters) {
   return function(dimes) {
@@ -36,29 +36,90 @@ function toSentence(quarters) {
     }
   }
 }
-
-const incrementCounter = (counter) => {
-  if (isNaN(counter)) {
-    return;
-  }
-  if (counter >= 3) {
-    return counter;
-  } else {
-    console.log(counter);
-    return incrementCounter(counter + 1);
-  }
-}
-  //return coinCounter(amount % ${value})
+ 
 const quarter = coin(.25);
 const dime = coin(.1);
 const nickel = coin(.05);
 const penny = coin(.01);
-
+console.log(toSentence(quarter()))
 //(im gonna keep this session running regardless - so feel free to use it :))
 
-console.log(toSentence(quarter()))
-//--------------------------------------------------------------------------------------------------------
 
+
+        //Base Functions
+//-----------------------------------------------------------------------------------------------------
+function coin(value) {
+  return function(money){
+    return Math.floor(money / value); //floor will round 19.96 down to 19	
+  }
+}
+
+function remains (value) {
+  return function (money) {
+    return money % value;
+  }
+}
+
+function recursiveMoney(counter) {
+  return function(currency) {
+    return function (money) {
+      if (isNaN(money)) {
+        return;
+      }
+      if (money <= 0) {
+        return;
+      } else {
+        console.log(currency[counter][1] + 's: ' + coin(currency[counter][0])(money));
+        return recursiveMoney(counter + 1)(currency)(remains(currency[counter][0])(money));
+      }
+    }
+  }
+}
+
+const countMoney = recursiveMoney(0);
+//ex: Money - $4.85
+//code: usaChange(4.85);
+//result: 19, 0, 1, 4
+
+//-----------------------------------------------------------------------------
+        //USA
+const usaCoins = [
+  [.25,'quarter'],
+  [.1,'dime'],
+  [.05,'nickel'],
+  [.01,'penny']
+];
+
+const usaChange = countMoney(usaCoins);
+
+//------------------------------------------------------------------------------
+        //Canada
+const canadaCoins = [
+  [2, 'toonie'],
+  [1, 'loonie']
+  [.25,'quarter'],
+  [.1,'dime'],
+  [.05,'nickel'],
+  [.01,'penny']
+];
+
+const canadaChange = countMoney(canadaCoins);
+
+//------------------------------------------------------------------------------
+        //Australia
+const stralianCoins = [
+  [1, 'dollariedoo'],
+  [.5, 'fiddycent'],
+  [.2, 'platy'],
+  [.1, 'bird'],
+  [.05, 'echidna'],
+  [.02, '2c'],
+  [.01, '1c']
+];
+
+const straliaChange = countMoney(stralianCoins);
+
+//-----------------------------------------------------------
 export default class Triangle {
   constructor(side1, side2, side3) {
     this.side1 = side1;
